@@ -10,7 +10,7 @@ def header_set(central_layout):
     edit = QLineEdit()
     edit.setPlaceholderText("Введите текст")
     central_layout.addWidget(edit)
-    return central_layout
+    return central_layout, edit
 
 def content_set(content_layout):
     for i in range(30):
@@ -18,10 +18,10 @@ def content_set(content_layout):
     return content_layout
 
 def footer_set(footer_layout):
-    edit = QLineEdit()
-    edit.setPlaceholderText("Введите текст")
-    footer_layout.addWidget(edit)
-    return footer_layout
+    button = QPushButton()
+    button.setText("Сохранить")
+    footer_layout.addWidget(button)
+    return footer_layout, button
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         
         header = QWidget()
         header_layout = QHBoxLayout()
-        header_layout = header_set(header_layout)
+        header_layout, header_edit = header_set(header_layout)
         header.setLayout(header_layout)
         central_layout.addWidget(header)
         
@@ -61,9 +61,17 @@ class MainWindow(QMainWindow):
 
         footer = QWidget()
         footer_layout = QHBoxLayout()
-        footer_layout = footer_set(footer_layout)
+        footer_layout, save_button = footer_set(footer_layout)
         footer.setLayout(footer_layout)
         central_layout.addWidget(footer)
+
+        header_edit.textChanged.connect(
+            lambda: footer.setStyleSheet("QWidget{background-color: yellow;}QPushButton{background-color: none;}")
+        )
+        save_button.clicked.connect(
+            lambda: footer.setStyleSheet("QWidget{background-color: green;}QPushButton{background-color: none;}")
+        )
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
